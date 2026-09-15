@@ -88,6 +88,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::post('/adjustments/{adjustment}/decide', [AdjustmentController::class, 'decide'])->middleware('permission:adjustments.approve')->name('adjustments.decide');
         Route::post('/attachments', [AttachmentController::class, 'store'])->middleware('permission:attachments.create')->name('attachments.store');
         Route::get('/exports/{type}.csv', [ExportController::class, 'csv'])->middleware('permission:reports.view')->name('exports.csv');
+        Route::get('/exports/{type}.xlsx', [ExportController::class, 'xlsx'])->middleware('permission:reports.view')->name('exports.xlsx');
         Route::get('/exports/{type}.pdf', [ExportController::class, 'pdf'])->middleware('permission:reports.view')->name('exports.pdf');
     });
 });

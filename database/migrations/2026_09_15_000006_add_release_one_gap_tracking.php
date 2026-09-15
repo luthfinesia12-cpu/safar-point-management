@@ -8,49 +8,57 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('purchase_requests', function (Blueprint $table): void {
-            $table->text('cancellation_reason')->nullable();
-            $table->foreignId('cancelled_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamp('cancelled_at')->nullable();
-        });
+        if (! Schema::hasColumn('purchase_requests', 'cancellation_reason')) {
+            Schema::table('purchase_requests', function (Blueprint $table): void {
+                $table->text('cancellation_reason')->nullable();
+                $table->foreignId('cancelled_by')->nullable()->constrained('users')->nullOnDelete();
+                $table->timestamp('cancelled_at')->nullable();
+            });
+        }
 
-        Schema::table('purchase_orders', function (Blueprint $table): void {
-            $table->text('cancellation_reason')->nullable();
-            $table->foreignId('cancelled_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamp('cancelled_at')->nullable();
-            $table->text('close_short_reason')->nullable();
-            $table->foreignId('close_short_requested_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamp('close_short_requested_at')->nullable();
-            $table->foreignId('close_short_approved_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamp('close_short_approved_at')->nullable();
-        });
+        if (! Schema::hasColumn('purchase_orders', 'cancellation_reason')) {
+            Schema::table('purchase_orders', function (Blueprint $table): void {
+                $table->text('cancellation_reason')->nullable();
+                $table->foreignId('cancelled_by')->nullable()->constrained('users')->nullOnDelete();
+                $table->timestamp('cancelled_at')->nullable();
+                $table->text('close_short_reason')->nullable();
+                $table->foreignId('close_short_requested_by')->nullable()->constrained('users')->nullOnDelete();
+                $table->timestamp('close_short_requested_at')->nullable();
+                $table->foreignId('close_short_approved_by')->nullable()->constrained('users')->nullOnDelete();
+                $table->timestamp('close_short_approved_at')->nullable();
+            });
+        }
 
-        Schema::create('document_status_histories', function (Blueprint $table): void {
-            $table->id();
-            $table->string('document_type');
-            $table->unsignedBigInteger('document_id');
-            $table->string('from_status')->nullable();
-            $table->string('to_status');
-            $table->foreignId('changed_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->text('reason')->nullable();
-            $table->timestamp('changed_at');
-            $table->index(['document_type', 'document_id', 'changed_at']);
-        });
+        if (! Schema::hasTable('document_status_histories')) {
+            Schema::create('document_status_histories', function (Blueprint $table): void {
+                $table->id();
+                $table->string('document_type');
+                $table->unsignedBigInteger('document_id');
+                $table->string('from_status')->nullable();
+                $table->string('to_status');
+                $table->foreignId('changed_by')->nullable()->constrained('users')->nullOnDelete();
+                $table->text('reason')->nullable();
+                $table->timestamp('changed_at');
+                $table->index(['document_type', 'document_id', 'changed_at'], 'doc_status_hist_idx');
+            });
+        }
 
-        Schema::create('document_workflow_requests', function (Blueprint $table): void {
-            $table->id();
-            $table->string('document_type');
-            $table->unsignedBigInteger('document_id');
-            $table->string('action');
-            $table->string('status')->default('submitted');
-            $table->foreignId('requested_by')->constrained('users');
-            $table->foreignId('decided_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->text('reason');
-            $table->text('decision_notes')->nullable();
-            $table->timestamp('decided_at')->nullable();
-            $table->timestamps();
-            $table->index(['document_type', 'document_id', 'action', 'status']);
-        });
+        if (! Schema::hasTable('document_workflow_requests')) {
+            Schema::create('document_workflow_requests', function (Blueprint $table): void {
+                $table->id();
+                $table->string('document_type');
+                $table->unsignedBigInteger('document_id');
+                $table->string('action');
+                $table->string('status')->default('submitted');
+                $table->foreignId('requested_by')->constrained('users');
+                $table->foreignId('decided_by')->nullable()->constrained('users')->nullOnDelete();
+                $table->text('reason');
+                $table->text('decision_notes')->nullable();
+                $table->timestamp('decided_at')->nullable();
+                $table->timestamps();
+                $table->index(['document_type', 'document_id', 'action', 'status'], 'doc_workflow_idx');
+            });
+        }
 
         Schema::create('master_import_batches', function (Blueprint $table): void {
             $table->id();
