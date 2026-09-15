@@ -1,0 +1,2 @@
+@extends('layouts.app', ['title' => 'Ganti Password'])
+@section('content')<section class="panel"><h1>Ganti Password</h1><p>Password awal wajib diganti sebelum melanjutkan.</p><form method="post" action="{{ route('password.update') }}">@csrf @method('put')<label>Password baru<input type="password" name="password" required></label><label>Konfirmasi password<input type="password" name="password_confirmation" required></label><button>Simpan Password</button></form></section>@endsection
