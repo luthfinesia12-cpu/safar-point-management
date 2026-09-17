@@ -1,2 +1,4 @@
-@extends('layouts.app', ['title' => 'Ganti Password'])
-@section('content')<section class="panel"><h1>Ganti Password</h1><p>Password awal wajib diganti sebelum melanjutkan.</p><form method="post" action="{{ route('password.update') }}">@csrf @method('put')<label>Password baru<input type="password" name="password" required></label><label>Konfirmasi password<input type="password" name="password_confirmation" required></label><button>Simpan Password</button></form></section>@endsection
+@extends('layouts.app', ['title'=>'Ganti Password'])
+@section('content')
+<div class="page-header"><div><div class="breadcrumb">Keamanan Akun</div><h1>Ganti Password</h1><p>Lindungi akun dengan password yang kuat.</p></div></div><section class="panel" style="max-width:720px"><div class="panel-header"><div><h2>Password Baru</h2><p>Password awal wajib diganti sebelum melanjutkan.</p></div></div><form method="post" action="{{ route('password.update') }}">@csrf @method('put')<label>Password Baru<input type="password" name="password" minlength="12" required autocomplete="new-password"><small>Minimal 12 karakter.</small></label><label>Konfirmasi Password<input type="password" name="password_confirmation" minlength="12" required autocomplete="new-password"></label><button>Simpan Password</button></form></section>
+@endsection

@@ -1,1 +1,24 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login | Safar Point</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#123b3a;font-family:system-ui;color:#17202a}.box{background:#fff;width:min(92vw,420px);padding:2rem;border-radius:10px}label{display:grid;gap:.4rem;margin:1rem 0}input{padding:.7rem;width:100%;box-sizing:border-box}button{padding:.7rem 1rem;background:#e29b38;border:0;border-radius:5px;font-weight:700;width:100%}.error{color:#a52828}</style></head><body><main class="box"><h1>Safar Point</h1><p>Masuk ke panel manajemen.</p>@if($errors->any())<p class="error">{{ $errors->first() }}</p>@endif<form method="post" action="{{ route('login.store') }}">@csrf<label>Email<input type="email" name="email" value="{{ old('email') }}" required autofocus></label><label>Password<input type="password" name="password" required></label><label><span><input type="checkbox" name="remember"> Ingat saya</span></label><button>Masuk</button></form></main></body></html>
+@extends('layouts.app', ['title' => 'Masuk'])
+@section('content')
+<div class="auth-page">
+    <section class="auth-showcase">
+        <div class="auth-logo"><div class="brand-mark">SP</div><div><strong>SAFAR POINT</strong><span>Management System</span></div></div>
+        <h1>Operasional lebih rapi, keputusan lebih cepat.</h1>
+        <p>Kelola master data, purchasing, persediaan, pembayaran, dan laporan Safar Point dalam satu sistem terpadu.</p>
+    </section>
+    <section class="auth-card-wrap">
+        <main class="auth-card">
+            <div class="mobile-only auth-logo"><div class="brand-mark">SP</div><div><strong>SAFAR POINT</strong><span>Management System</span></div></div>
+            <h2>Selamat datang</h2><p>Masuk menggunakan akun Safar Point Anda.</p>
+            @if($errors->any())<div class="alert alert-error"><x-icon name="warning"/><span>{{ $errors->first() }}</span></div>@endif
+            <form method="post" action="{{ route('login.store') }}">@csrf
+                <label>Email<input type="email" name="email" value="{{ old('email') }}" placeholder="nama@safarpoint.local" required autofocus autocomplete="username"></label>
+                <label>Password<input type="password" name="password" placeholder="Masukkan password" required autocomplete="current-password"></label>
+                <label class="login-check"><span><input type="checkbox" name="remember"> Ingat saya di perangkat ini</span></label>
+                <button>Masuk ke Sistem</button>
+            </form>
+            <p style="text-align:center;margin:20px 0 0;font-size:12px">Akses khusus pengguna resmi Safar Point.</p>
+        </main>
+    </section>
+</div>
+@endsection

@@ -26,10 +26,29 @@ class MasterDataController extends Controller
         'bank-accounts' => BankAccount::class,
     ];
 
-    public function index(string $type): View
+    public function index(string $type, Request $request): View
     {
         $model = $this->model($type);
-        $items = $model::query()->latest()->paginate(20)->withQueryString();
+        $items = $model::query()
+            ->when($type === 'products', fn ($query) => $query->with(['category', 'brand', 'unit']))
+            ->when($request->filled('search') && $type !== 'bank-accounts', function ($query) use ($request, $type): void {
+                $search = '%'.$request->string('search').'%';
+                $query->where(function ($nested) use ($search, $type): void {
+                    $nested->where('name', 'like', $search)
+                        ->orWhere('code', 'like', $search);
+                    if ($type === 'products') {
+                        $nested->orWhere('sku', 'like', $search)
+                            ->orWhere('barcode', 'like', $search);
+                    }
+                });
+            })
+            ->when($request->filled('search') && $type === 'bank-accounts', function ($query) use ($request): void {
+                $search = '%'.$request->string('search').'%';
+                $query->where('bank_name', 'like', $search)
+                    ->orWhere('account_number', 'like', $search)
+                    ->orWhere('account_holder', 'like', $search);
+            })
+            ->latest()->paginate(20)->withQueryString();
 
         return view('master-data.index', ['type' => $type, 'items' => $items, 'fields' => $this->fields($type), 'categories' => Category::where('is_active', true)->get(), 'brands' => Brand::where('is_active', true)->get(), 'units' => Unit::where('is_active', true)->get()]);
     }

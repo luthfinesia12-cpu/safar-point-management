@@ -16,6 +16,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseRequestController;
+use App\Http\Controllers\ProductScanController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::post('/master/bank-accounts', [MasterDataController::class, 'store'])->middleware('permission:bank-accounts.manage')->name('master-data.bank-accounts.store')->defaults('type', 'bank-accounts');
         Route::put('/master/bank-accounts/{id}', [MasterDataController::class, 'update'])->middleware('permission:bank-accounts.manage')->name('master-data.bank-accounts.update')->defaults('type', 'bank-accounts');
         Route::get('/master/{type}', [MasterDataController::class, 'index'])->middleware('permission:master-data.manage')->name('master-data.index');
+        Route::get('/products/scan-lookup', ProductScanController::class)->name('products.scan-lookup');
         Route::post('/master/{type}', [MasterDataController::class, 'store'])->middleware('permission:master-data.manage')->name('master-data.store');
         Route::put('/master/{type}/{id}', [MasterDataController::class, 'update'])->middleware('permission:master-data.manage')->name('master-data.update');
         Route::get('/master/{type}/import-template.csv', [MasterDataImportController::class, 'template'])->middleware('permission:master-data.import')->name('master-data.import-template');
