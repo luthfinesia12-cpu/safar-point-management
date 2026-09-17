@@ -16,7 +16,7 @@
 @endphp
 <div class="app-shell" data-app-shell>
     <aside class="sidebar" id="app-sidebar">
-        <div class="brand"><div class="brand-mark">SP</div><div><strong>SAFAR POINT</strong><span>Management System</span></div></div>
+        <div class="brand"><div class="brand-mark">SP</div><div><strong><h3>SAFAR POINT</h3></strong><span>Management System</span></div></div>
         <nav class="side-nav" aria-label="Navigasi utama">
             @can('dashboard.view')<a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"><x-icon name="dashboard"/><span>Dashboard</span></a>@endcan
             @can('master-data.manage')
